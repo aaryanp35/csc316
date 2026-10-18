@@ -8,7 +8,7 @@ import csv
 import random
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent.parent / "data"
+OUT = Path(__file__).resolve().parent.parent / "public" / "data"
 rng = random.Random(316)
 
 

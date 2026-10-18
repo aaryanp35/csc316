@@ -1,0 +1,11 @@
+:root {
+  --bg: #fafaf7;
+  --card: #fff;
+  --ink: #1f2328;
+  --muted: #5d6671;
+  --rule: #e3e3dc;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.5; }
+svg text { font-size: 12px; fill: var(--ink); }

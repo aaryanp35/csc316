@@ -1,67 +1,13 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The True Cost of Fast Fashion</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <header class="hero">
-    <h1>The True Cost of Fast Fashion</h1>
-    <p>What goes into one garment, how big the problem is, and what you can do about it.</p>
-  </header>
-  <p id="load-error" class="error" role="alert"></p>
-  <p class="banner">Development build: charts currently use placeholder data (see data/README.md).</p>
-
-  <main>
-    <section id="group-1">
-      <h2>1. What goes into one garment?</h2>
-
-      <article class="vis-card">
-        <h3>Which stage of the supply chain has the biggest footprint?</h3>
-        <div class="controls">
-          <label>Garment <select id="ctl-garment"></select></label>
-          <label>Measure <select id="ctl-metric"></select></label>
-        </div>
-        <div id="vis-stages" class="vis"></div>
-      </article>
-
-      <article class="vis-card">
-        <h3>How do blends like poly-cotton compare with pure fibres?</h3>
-        <div id="vis-blends" class="vis"></div>
-      </article>
-    </section>
-
-    <section id="group-2">
-      <h2>2. How big is the problem, and where is it?</h2>
-
-      <article class="vis-card">
-        <h3>How have clothing production and waste grown since 2000?</h3>
-        <div id="vis-growth" class="vis"></div>
-      </article>
-
-      <article class="vis-card">
-        <h3>Which countries make most of our clothes, and which have the highest carbon footprint?</h3>
-        <div class="controls">
-          <label>Year <input id="ctl-year" type="range"> <output id="ctl-year-label"></output></label>
-        </div>
-        <div id="vis-countries" class="vis"></div>
-      </article>
-    </section>
-
-    <section id="group-3">
-      <h2>3. What can I do about it?</h2>
-
-      <article class="vis-card">
-        <h3>Do "sustainable" or certified brands really have lower footprints, and do they cost more?</h3>
-        <div id="vis-cert" class="vis"></div>
-      </article>
-    </section>
-  </main>
-
-  <script src="js/lib/d3.min.js"></script>
-  <script type="module" src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>The True Cost of Fast Fashion</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
