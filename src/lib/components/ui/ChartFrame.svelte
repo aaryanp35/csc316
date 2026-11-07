@@ -8,16 +8,18 @@
 
   interface Props {
     aspect?: number;
+    /** fixed outer height in px; overrides aspect (for row-based layouts that shouldn't shrink with width) */
+    height?: number;
     margin?: { top: number; right: number; bottom: number; left: number };
     label: string;
     children: Snippet<[{ width: number; height: number }]>;
   }
 
-  let { aspect = 0.6, margin = { top: 24, right: 24, bottom: 48, left: 64 }, label, children }: Props = $props();
+  let { aspect = 0.6, height: fixedHeight, margin = { top: 24, right: 24, bottom: 48, left: 64 }, label, children }: Props = $props();
 
   let clientWidth = $state(640);
   const outerWidth = $derived(Math.max(280, clientWidth));
-  const outerHeight = $derived(Math.round(outerWidth * aspect));
+  const outerHeight = $derived(fixedHeight ?? Math.round(outerWidth * aspect));
   const width = $derived(outerWidth - margin.left - margin.right);
   const height = $derived(outerHeight - margin.top - margin.bottom);
 </script>

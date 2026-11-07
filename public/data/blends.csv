@@ -1,4 +1,5 @@
-fabric,co2_pct_change,water_pct_change,co2_kg,water_litres,n_garments
-100% polyester,-4,-87,9.88,350,1777
-65/35 poly-cotton,25,22,12.9,3300,2410
-95/5 stretch cotton,4,5,10.7,2840,1850
+fabric,co2_kg,water_m3,n_norway,co2_vs_cotton_pct,water_vs_cotton_pct,co2_vs_polyester_pct,water_vs_polyester_pct
+100% cotton,17.405,5.546,3228,0.0,0.0,-0.1,9.6
+100% polyester,17.414,5.06,1777,0.1,-8.8,0.0,0.0
+65/35 poly-cotton,21.385,6.51,1442,22.9,17.4,22.8,28.7
+95/5 stretch cotton,17.738,5.541,1185,1.9,-0.1,1.9,9.5

@@ -1,0 +1,25 @@
+fabric,step,co2_kg,water_m3
+100% cotton,spinning,3.668,0.899
+100% cotton,sizing,0.804,0.551
+100% cotton,weaving,7.643,2.227
+100% cotton,desizing,1.288,0.416
+100% cotton,reactive dyeing (cotton),4.002,1.453
+100% polyester,spinning,3.754,0.911
+100% polyester,sizing,0.804,0.551
+100% polyester,weaving,7.643,2.227
+100% polyester,desizing,1.288,0.416
+100% polyester,disperse dyeing (polyester),3.464,0.931
+100% polyester,heat-setting,0.459,0.025
+65/35 poly-cotton,spinning,3.724,0.907
+65/35 poly-cotton,sizing,0.804,0.551
+65/35 poly-cotton,weaving,7.643,2.227
+65/35 poly-cotton,desizing,1.288,0.416
+65/35 poly-cotton,reactive dyeing (cotton),4.002,1.453
+65/35 poly-cotton,disperse dyeing (polyester),3.464,0.931
+65/35 poly-cotton,heat-setting,0.459,0.025
+95/5 stretch cotton,spinning,3.541,0.869
+95/5 stretch cotton,sizing,0.804,0.551
+95/5 stretch cotton,weaving,7.643,2.227
+95/5 stretch cotton,desizing,1.288,0.416
+95/5 stretch cotton,reactive dyeing (cotton),4.002,1.453
+95/5 stretch cotton,heat-setting,0.459,0.025
