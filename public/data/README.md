@@ -21,7 +21,7 @@ python -I scripts/pipeline/build_data.py data/raw public/data
 
 | File | Used by | Columns | How it is made |
 | --- | --- | --- | --- |
-| `blends.csv` | Frame 3 (BlendDiverge) | `fabric, co2_kg, water_m3, n_norway, co2_vs_cotton_pct, water_vs_cotton_pct, co2_vs_polyester_pct, water_vs_polyester_pct` | Same factory chain for every fabric, per 1 kg woven fabric: ring spinning (share-weighted; elastane is dry-spun) → sizing → air-jet weaving → desizing → one dye bath per fibre family with ≥10% share (reactive for cotton, disperse for polyester) → heat-setting if any synthetic. `n_norway` = Norway garments whose shell fabric is that fibre mix (any cotton/polyester or cotton/elastane ratio) |
+| `blends.csv` | Frame 3 (BlendDiverge; % changes set to Sketch 3, see notes) | `fabric, co2_kg, water_m3, n_norway, co2_vs_cotton_pct, water_vs_cotton_pct, co2_vs_polyester_pct, water_vs_polyester_pct` | Same factory chain for every fabric, per 1 kg woven fabric: ring spinning (share-weighted; elastane is dry-spun) → sizing → air-jet weaving → desizing → one dye bath per fibre family with ≥10% share (reactive for cotton, disperse for polyester) → heat-setting if any synthetic. `n_norway` = Norway garments whose shell fabric is that fibre mix (any cotton/polyester or cotton/elastane ratio) |
 | `blend_steps.csv` | Frame 3 tooltip | `fabric, step, co2_kg, water_m3` | The steps above |
 | `tshirt_stages.csv` | Frame 2 draft | `material, stage, co2_kg, water_m3` | Knitted T-shirt per kg: spinning, circular knitting, dyeing, generic T-shirt assembly ("sewing") |
 | `growth.csv` | Frame 4 (GrowthLines) | `series, year, value, unit, index, source` | Kaggle rows for the three series; `index` = value / first year × 100 |
@@ -34,8 +34,11 @@ python -I scripts/pipeline/build_data.py data/raw public/data
 ## Notes and caveats
 
 - Carbonfact values are factory steps only (no fibre farming, transport, use or end of life) and use a global energy mix.
-  Our blend chain gives +23% CO₂ for 65/35 poly-cotton vs 100% cotton; the process book's hand calculation (31%) used
-  only spinning and dyeing. Material losses (`Input required (kg)`) are not applied.
+  **Frame 3 uses the group's agreed figures from the updated Sketch 3**, vs 100% cotton: polyester −7% CO₂ / −12% water,
+  65/35 poly-cotton +31% / +22%, 95/5 stretch cotton +1% / +1% (`SKETCH3_VS_COTTON` in `build_data.py`). 100% cotton
+  keeps its Carbonfact totals, the other fabrics are scaled from it, and their steps in `blend_steps.csv` are scaled by
+  the same factor. The unscaled full chain gives +23% / +17% for poly-cotton and 0% / −9% for polyester.
+  Material losses (`Input required (kg)`) are not applied.
 - The Kaggle file collects figures from named sources (McKinsey, EPA, WWF); the series have different years, so the
   chart only draws points where a figure exists.
 - Recycling-funnel shares depend on the rule set above, and the process book used a slightly different one (19% vs our 22%).
