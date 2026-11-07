@@ -119,12 +119,33 @@ for name, mix in FABRICS:
     for step, (g, w) in steps:
         step_rows.append({"fabric": name, "step": step, "co2_kg": round(g, 3), "water_m3": round(w, 3)})
 blends = pd.DataFrame(blend_rows)
+steps_df = pd.DataFrame(step_rows)
+
+# Frame 3 uses the group's agreed figures from the updated Sketch 3 (% change vs 100% cotton, CO2 and water), not the
+# full-chain result above. 100% cotton keeps its Carbonfact totals; the other fabrics are scaled from it, and each
+# fabric's factory steps are scaled by the same factor so the tooltip breakdown still adds up to the total.
+SKETCH3_VS_COTTON = {  # fabric: (CO2 %, water-scarcity %)
+    "100% cotton": (0, 0),
+    "100% polyester": (-7, -12),
+    "65/35 poly-cotton": (31, 22),
+    "95/5 stretch cotton": (1, 1),
+}
+cot = blends.set_index("fabric").loc["100% cotton"]
+for name, (dc, dw) in SKETCH3_VS_COTTON.items():
+    i = blends.fabric == name
+    kc, kw = cot.co2_kg * (1 + dc / 100) / blends.loc[i, "co2_kg"].iloc[0], cot.water_m3 * (1 + dw / 100) / blends.loc[i, "water_m3"].iloc[0]
+    blends.loc[i, "co2_kg"] = round(cot.co2_kg * (1 + dc / 100), 3)
+    blends.loc[i, "water_m3"] = round(cot.water_m3 * (1 + dw / 100), 3)
+    j = steps_df.fabric == name
+    steps_df.loc[j, "co2_kg"] = (steps_df.loc[j, "co2_kg"] * kc).round(3)
+    steps_df.loc[j, "water_m3"] = (steps_df.loc[j, "water_m3"] * kw).round(3)
+
 for base, col in (("100% cotton", "cotton"), ("100% polyester", "polyester")):
     b = blends.set_index("fabric").loc[base]
     blends[f"co2_vs_{col}_pct"] = ((blends.co2_kg / b.co2_kg - 1) * 100).round(1)
     blends[f"water_vs_{col}_pct"] = ((blends.water_m3 / b.water_m3 - 1) * 100).round(1)
 write("blends.csv", blends)
-write("blend_steps.csv", pd.DataFrame(step_rows))
+write("blend_steps.csv", steps_df)
 facts["norway_garments"] = len(NOR)
 facts["norway_with_fibre_label"] = int((NOR["fibres"].map(len) > 0).sum())
 facts["norway_blend_share"] = round(float((NOR["fibres"].map(len) > 1).sum() / (NOR["fibres"].map(len) > 0).sum()), 3)

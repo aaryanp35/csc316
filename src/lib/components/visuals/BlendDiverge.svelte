@@ -1,6 +1,6 @@
 <!-- Sketch 3 / storyboard frame 3: blends vs pure fibres (diverging arrows + bars). Data: Carbonfact, 1 kg woven fabric.
-Top: one row per fabric, two panels (CO2, water scarcity). Arrow starts at the chosen pure-fibre line (100% cotton or
-100% polyester); length = % change, red = worse, blue = better, gray dot = about the same (within ±2%).
+Top: one row per fabric, two panels (CO2, water scarcity). Arrow starts at the 100% cotton line; length = % change,
+red = worse, blue = better, gray dot = about the same (within ±1%). Figures follow the updated Sketch 3.
 Right column: how common the fibre mix is in the Norway post-consumer data (circle area = garments counted).
 Bottom: absolute footprint per kg of fabric, one bar per fabric; the focused fabric is hatched.
 Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it down by factory step.
@@ -16,12 +16,12 @@ Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it do
   let { data, steps }: Props = $props();
 
   const uid = $props.id();
-  const SAME = 2; // |% change| at or below this reads as "about the same"
+  const SAME = 1; // |% change| at or below this reads as "about the same"
   const bases = [
     { key: "cotton", fabric: "100% cotton" },
     { key: "polyester", fabric: "100% polyester" },
   ] as const;
-  let base = $state<"cotton" | "polyester">("cotton");
+  const base: "cotton" | "polyester" = "cotton"; // Sketch 3 compares with 100% cotton only
 
   type Row = BlendRow & { co2_pct: number; water_pct: number };
   const rows: Row[] = $derived(data.map((d) => ({
@@ -74,15 +74,6 @@ Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it do
   Factory steps only (spinning to dyeing) for 1 kg of woven fabric.
 </p>
 
-<div class="toolbar">
-  <span id="{uid}-cmp">Compare with</span>
-  <div class="seg" role="radiogroup" aria-labelledby="{uid}-cmp">
-    {#each bases as b (b.key)}
-      <button role="radio" aria-checked={base === b.key} class:on={base === b.key} onclick={() => (base = b.key)}>{b.fabric}</button>
-    {/each}
-  </div>
-</div>
-
 <ul class="legend" aria-label="Legend">
   <li><svg width="26" height="10" aria-hidden="true"><line x1="1" x2="18" y1="5" y2="5" class="a-worse" /><path d="M25,5 L17,1 L17,9 Z" class="h-worse" /></svg>Worse than {baseline.fabric}</li>
   <li><svg width="26" height="10" aria-hidden="true"><line x1="25" x2="8" y1="5" y2="5" class="a-better" /><path d="M1,5 L9,1 L9,9 Z" class="h-better" /></svg>Better</li>
@@ -99,7 +90,7 @@ Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it do
     {@const gap = narrow ? 14 : 24}
     {@const shift = narrow ? 12 : 0}
     {@const panelW = (width - labelW - countW - gap * 2) / 2}
-    {@const lim = Math.max(30, Math.ceil((max(rows, (d) => Math.max(Math.abs(d.co2_vs_cotton_pct), Math.abs(d.water_vs_cotton_pct), Math.abs(d.co2_vs_polyester_pct), Math.abs(d.water_vs_polyester_pct))) ?? 10) / 10 + 0.5) * 10)}
+    {@const lim = Math.max(30, Math.ceil((max(rows, (d) => Math.max(Math.abs(d.co2_pct), Math.abs(d.water_pct))) ?? 10) / 10 + 0.5) * 10)}
     {@const x = scaleLinear().domain([-lim, lim]).range([0, panelW])}
     {@const row = scaleBand<string>().domain(others.map((d) => d.fabric)).range([0, height]).paddingInner(0.12)}
     {@const rMax = Math.min(row.bandwidth() / 2 - 4, narrow ? 16 : 24)}
@@ -208,7 +199,7 @@ Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it do
 <p class="note">
   <svg class="swatch" width="14" height="14" aria-hidden="true"><rect width="14" height="14" rx="3" fill="url(#{uid}-hatch)" /></svg>
   Hatched bar = {focus.fabric}{hovered ? "" : " (the biggest footprint; hover any fabric to compare)"}. Dashed line = {baseline.fabric}.
-  Water scarcity weights each litre by how scarce water is where it's used. Source: Carbonfact open LCA database (world average);
+  Water scarcity weights each litre by how scarce water is where it's used. Source: Carbonfact open LCA database (world average), % changes as agreed in Sketch 3;
   Norway counts any cotton/polyester or cotton/elastane mix.
 </p>
 
@@ -249,12 +240,6 @@ Hovering any row or bar focuses that fabric everywhere; the tooltip breaks it do
 </details>
 
 <style>
-  .toolbar { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 0.85rem; color: var(--muted); flex-wrap: wrap; }
-  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 2px; background: var(--wash); }
-  .seg button { border: 0; background: transparent; color: var(--muted); font: inherit; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
-  .seg button.on { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
-  .seg button:focus-visible { outline: 2px solid var(--series-1); outline-offset: 1px; }
-
   .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; margin: 0 0 4px; padding: 0; font-size: 0.85rem; color: var(--muted); }
   .legend li { display: flex; align-items: center; gap: 6px; }
   .legend .muted { color: var(--faint); }

@@ -2,6 +2,7 @@
 <!-- Draft (not part of the site): storyboard frame 7, "Thrown out, still wearable".
      A bin of 100 garment icons from Norway's textile-waste stream, coloured by condition (diverging: wearable = blue,
      not wearable = red, noticeable wear = neutral), filled from the bottom with the best condition first.
+     Each icon also shows wear for its grade: none (5), a stain (4), stain + hole (3), holes + rip (2), long tear + frayed hem (1).
      Data: public/data/waste_condition.csv + facts.json (Norway post-consumer garments). -->
 <html lang="en" data-theme="light">
 <head>
@@ -16,6 +17,9 @@
     h1 { margin: 2px 0 10px; font-size: 1.5rem; }
     .draft { margin-top: 14px; font-size: 0.75rem; color: var(--faint); }
     svg text { font-family: inherit; }
+    .hole { fill: var(--card); }
+    .stain { fill: rgba(60, 40, 10, 0.38); }
+    .rip { fill: none; stroke: var(--card); stroke-linecap: round; stroke-linejoin: round; }
   </style>
 </head>
 <body>
@@ -25,7 +29,7 @@
     <p class="headline" id="headline"></p>
     <p class="sub" id="sub"></p>
     <svg id="chart" width="976" height="470" role="img"></svg>
-    <p class="draft">Draft design for the next milestone. Icons will drop into the bin on scroll; hovering a condition band highlights its garments and shows the count.
+    <p class="draft">Draft design for the next milestone. Each icon shows wear for its grade (stains, holes, rips, frayed hems). Icons will drop into the bin on scroll; hovering a condition band highlights its garments and shows the count.
       Source: Norway post-consumer garment data (Zenodo 20440761), "textile waste, not for reuse" stream, condition graded 1–5.</p>
   </div>
   <script type="module">
@@ -56,15 +60,34 @@
     const SHIRT = "M-7,-9 L-3,-11 Q0,-8 3,-11 L7,-9 L12,-4 L9,0 L7,-2 L7,11 L-7,11 L-7,-2 L-9,0 L-12,-4 Z";
     const PANTS = "M-8,-11 L8,-11 L9,11 L3,11 L0,-3 L-3,11 L-9,11 Z";
     const cell = 38, cols = 10, left = (bin.x0 + bin.x1) / 2 - (cols - 1) * cell / 2;
-    svg.append("g").selectAll("path").data(order).join("path")
-      .attr("d", (_, i) => (i % 2 ? PANTS : SHIRT))
+    // wear and tear drawn on top of each icon, more damage at lower grades:
+    // 5 none, 4 a small stain, 3 stain + small hole, 2 holes + a rip, 1 long tear, holes and a frayed hem
+    const hole = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" class="hole"/>`;
+    const stain = (x, y, rx, ry = rx) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" class="stain"/>`;
+    const rip = (d, w = 1) => `<path d="${d}" class="rip" style="stroke-width:${w}"/>`;
+    const fray = (x0, x1, y = 11) => { let d = `M${x0},${y + 0.6}`; for (let x = x0, k = 0; x <= x1 + 0.01; x += (x1 - x0) / 6, k++) d += ` L${x},${k % 2 ? y - 2.6 : y + 0.6}`; return `<path d="${d} Z" class="hole"/>`; };
+    const WEAR = {
+      shirt: { 5: "", 4: stain(3, 5, 1.6),
+        3: stain(-3, 6, 2.6, 1.8) + hole(4, -1, 1.2),
+        2: stain(-3, 7, 2) + hole(-3, 2, 1.5) + hole(4, 7, 1.1) + rip("M1,-5 L3,-2 L1,1"),
+        1: rip("M-5,-4 L-1,1 L-4,4 L0,8", 1.6) + hole(4, 0, 1.8) + hole(3, 6, 1.3) + stain(-4, 8, 2) + fray(-7, 7) },
+      pants: { 5: "", 4: stain(5.5, 4, 1.5),
+        3: stain(-5.5, 6, 2, 2.6) + hole(4, -7, 1.1),
+        2: stain(5.5, 3, 1.8) + hole(-5.5, 2, 1.4) + hole(6, 8, 1.1) + rip("M2,-9 L4,-7 L2,-5"),
+        1: rip("M-6,-2 L-4,2 L-6.5,5 L-5,9", 1.6) + hole(5.5, 1, 1.6) + hole(-3, -7, 1.2) + fray(-9, -3) + fray(3, 9) },
+    };
+    svg.append("g").selectAll("g").data(order).join("g")
       .attr("transform", (_, i) => `translate(${left + (i % cols) * cell},${bin.y1 - 26 - Math.floor(i / cols) * cell}) scale(1.35)`)
-      .attr("fill", (g) => color[g]);
+      .each(function (g, i) {
+        const kind = i % 2 ? "pants" : "shirt";
+        d3.select(this).html(`<path d="${kind === "pants" ? PANTS : SHIRT}" fill="${color[g]}"/>${WEAR[kind][g]}`);
+      });
 
     // legend: one row per grade, top = worst, with per-100 counts
     const lg = svg.append("g").attr("transform", "translate(650,70)");
     const item = lg.selectAll("g").data([...cats].reverse().sort((a, b) => a.grade - b.grade)).join("g").attr("transform", (_, i) => `translate(0,${i * 62})`);
-    item.append("path").attr("d", SHIRT).attr("transform", "translate(14,4) scale(1.4)").attr("fill", (d) => color[d.grade]);
+    item.append("g").attr("transform", "translate(14,4) scale(1.6)")
+      .html((d) => `<path d="${SHIRT}" fill="${color[d.grade]}"/>${WEAR.shirt[d.grade]}`);
     item.append("text").attr("x", 40).attr("y", 0).style("font-weight", 700).style("font-size", "15px").text((d) => `${d.n}  ${d.label}`);
     item.append("text").attr("x", 40).attr("y", 18).attr("class", "axis-label").text((d) => `grade ${d.grade} · ${d3.format(",")(d.count)} garments`);
     // bracket over the wearable grades
