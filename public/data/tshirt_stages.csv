@@ -1,0 +1,13 @@
+material,stage,co2_kg,water_m3
+cotton,spinning,3.668,0.899
+cotton,knitting,3.286,0.799
+cotton,dyeing,4.002,1.453
+cotton,sewing,0.147,0.822
+polyester,spinning,3.754,0.911
+polyester,knitting,3.286,0.799
+polyester,dyeing,3.464,0.931
+polyester,sewing,0.147,0.822
+wool,spinning,3.959,0.94
+wool,knitting,3.286,0.799
+wool,dyeing,4.704,1.485
+wool,sewing,0.147,0.822

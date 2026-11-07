@@ -1,0 +1,34 @@
+{
+  "norway_garments": 16464,
+  "norway_with_fibre_label": 12339,
+  "norway_blend_share": 0.505,
+  "fabric_making_share_of_factory_co2": 0.987,
+  "sewing_share_of_factory_co2": 0.013,
+  "tshirt_weight_kg": 0.14,
+  "tshirt_factory_co2_kg": 1.554,
+  "waste_garments_graded": 6333,
+  "waste_wearable_share": 0.689,
+  "waste_looks_new_share": 0.307,
+  "waste_price_tag_share": 0.0074,
+  "recyclable_share": 0.216,
+  "sweden_items": 31638,
+  "sweden_usage_raw": {
+    "Reuse": 19027,
+    "Export": 10054,
+    "Recycle": 2188,
+    "Remake": 156,
+    "Repair": 125,
+    "Energy recovery": 88
+  },
+  "sweden_export_share": 0.318,
+  "eu_years": [
+    2004,
+    2024
+  ],
+  "eu_households_tonnes_last": 1240000,
+  "eu_households_change": 1.067,
+  "eu_factories_change": -0.831,
+  "tshirt_water_litres": 2700.0,
+  "wears_2000": 15.0,
+  "wears_2022": 7.0
+}

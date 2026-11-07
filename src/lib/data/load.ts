@@ -1,16 +1,16 @@
-import { csv, autoType } from "d3";
-import type { BlendRow, BrandRow, CountryRow, Dataset, StageRow, TrendRow } from "./types";
+import { csv, json, autoType } from "d3";
+import type { BlendRow, BlendStepRow, Dataset, EuWasteRow, Facts, GrowthRow } from "./types";
 
 const url = (file: string) => `${import.meta.env.BASE_URL}data/${file}`;
 
-// autoType converts numeric columns; strings (garment, material, ...) stay strings.
+// autoType converts numeric columns; strings (fabric, series, ...) stay strings.
 export async function loadDataset(): Promise<Dataset> {
-  const [stages, blends, trends, countries, brands] = await Promise.all([
-    csv(url("lca_stages.csv"), autoType) as Promise<StageRow[]>,
+  const [blends, blendSteps, growth, euWaste, facts] = await Promise.all([
     csv(url("blends.csv"), autoType) as Promise<BlendRow[]>,
-    csv(url("industry_trends.csv"), autoType) as Promise<TrendRow[]>,
-    csv(url("country_footprint.csv"), autoType) as Promise<CountryRow[]>,
-    csv(url("brand_certification.csv"), autoType) as Promise<BrandRow[]>,
+    csv(url("blend_steps.csv"), autoType) as Promise<BlendStepRow[]>,
+    csv(url("growth.csv"), autoType) as Promise<GrowthRow[]>,
+    csv(url("eu_textile_waste.csv"), autoType) as Promise<EuWasteRow[]>,
+    json(url("facts.json")) as Promise<Facts>,
   ]);
-  return { stages, blends, trends, countries, brands };
+  return { blends, blendSteps, growth, euWaste, facts };
 }

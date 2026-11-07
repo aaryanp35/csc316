@@ -1,0 +1,6 @@
+grade,label,count,per100,wearable
+1,Beyond repair,236,3.7,False
+2,Unusable but repairable,510,8.1,False
+3,Noticeable wear,1225,19.3,False
+4,Minor signs of use,2417,38.2,True
+5,Looks new,1945,30.7,True
