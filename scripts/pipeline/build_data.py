@@ -6,7 +6,8 @@ Sources (see public/data/README.md for licences and links):
   carbonfact/   Carbonfact open LCA database (GitHub), impact-scores.csv per process. GHG = kg CO2e, WTU = m3 world-eq
                 (water-scarcity weighted water use), both per kg of output.
   norway/       Norway post-consumer garment data table (Zenodo 20440761), 16,464 garments.
-  sweden/       Swedish second-hand sorting labels (Zenodo 12518734; label counts from the authors' Hugging Face copy).
+  sweden/       Swedish second-hand sorting labels (Zenodo 12518734), one row per garment with its station
+                (zenodo_labels.csv, read from the zip's JSON annotations by fetch_sweden_labels.py).
   eurostat/     env_wasgen, textile wastes (W076), EU27_2020, tonnes.
   kaggle/       The Fast Fashion Industry Dataset 2000-2023 (harshinigande): sourced figures (McKinsey, EPA, WWF).
 """
@@ -209,14 +210,14 @@ write("recycling_funnel.csv", pd.DataFrame({
 facts["recyclable_share"] = round(float(steps[-1][1].mean()), 3)
 
 # ---------------------------------------------------------------- Sweden
-# Exact label frequencies over all 31,638 labelled items (train + test), from the dataset server's statistics.
-usage = Counter()
-for split in ("train", "test"):
-    with open(os.path.join(RAW, "sweden", f"hf_statistics_{split}.json"), encoding="utf-8") as f:
-        col = next(c for c in json.load(f)["statistics"] if c["column_name"] == "usage")
-    for label, n in col["column_statistics"]["frequencies"].items():
-        label = {"Rcycle": "Recycle", "Energy Recovery": "Energy recovery"}.get(label.strip(), label.strip())  # typos
-        usage[label] += n
+# "Where donations go" uses the sorting plant only: stations 1-2 are Wargön Innovation, which sorts donated textiles.
+# Station 3 is Myrorna's shops labelling stock they resell themselves (97% "Reuse"), not a sample of donations, and
+# pooling it in would make donations look more local than they are (60/32/7/1 instead of 49/41/9/2).
+sw = pd.read_csv(os.path.join(RAW, "sweden", "zenodo_labels.csv"), keep_default_na=False)
+sw = sw[~sw.usage.isin(["", "None"])]
+fix = {"rcycle": "Recycle"}  # typo; case also varies ("reuse", "Energy Recovery")
+sw["usage"] = sw.usage.map(lambda u: fix.get(u.lower(), u[:1].upper() + u[1:].lower()))
+usage = Counter(sw[sw.station.isin(["station1", "station2"])].usage)
 names = {"Reuse": "Resold in Sweden", "Export": "Exported", "Recycle": "Sent to recycling"}
 order = ["Resold in Sweden", "Exported", "Sent to recycling", "Other"]
 dest = Counter()

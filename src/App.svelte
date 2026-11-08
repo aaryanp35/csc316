@@ -85,7 +85,7 @@
           source="Carbonfact open LCA database (tshirt_stages.csv)" />
       </VisCard>
 
-      <VisCard frame={3} title="Blends are worse than either pure fibre">
+      <VisCard frame={3} title="Blends are worse than pure fibre">
         <BlendDiverge data={data.blends} steps={data.blendSteps} />
       </VisCard>
     </section>
@@ -99,7 +99,7 @@
           thrown away, and the footprint keeps growing, and in Europe, it has moved into our homes.
         </p>
       </header>
-      <VisCard frame={4} title="How have clothing production and waste grown since 2000?">
+      <VisCard frame={4} title="How have clothing production and textile waste evolved since 2000?">
         <GrowthLines data={data.growth} eu={data.euWaste} />
       </VisCard>
     </section>
@@ -117,7 +117,7 @@
       <VisCard frame={5} title="Where donations go">
         <Placeholder stat={fmtShare(f.sweden_export_share)} statLabel="of donated garments sorted in Sweden are exported, and the data doesn't follow them further"
           plan="A branching tree of 100 donated garments: resold in Sweden, exported (plane icon), sent to recycling, other; branch thickness = share of garments."
-          source="Swedish second-hand sorting labels, {fmtInt(f.sweden_items)} items (donations.csv)" />
+          source="Swedish sorting plant (Wargön Innovation), {fmtInt(f.sweden_items)} labelled garments (donations.csv)" />
       </VisCard>
 
       <VisCard frame={6} title="Is recycling the fix?">
@@ -169,8 +169,8 @@
         <ul>
           <li><span>✓</span><div><strong>Keep it, repair it, wear it longer.</strong> {fmtShare(f.waste_wearable_share)} of thrown-out clothes still had life in them.</div></li>
           <li><span>✓</span><div><strong>Buy second-hand first.</strong> Its footprint has already been paid.</div></li>
-          <li><span>✓</span><div><strong>Pass it on yourself:</strong> sell, swap or give. About {fmtShare(f.sweden_export_share)} of donations leave the country.</div></li>
-          <li><span>✓</span><div><strong>Don't count on recycling.</strong> Only about {Math.round(f.recyclable_share * 100)} in 100 garments can be recycled into new fibre.</div></li>
+          <li><span>✓</span><div><strong>Pass it on yourself:</strong> sell, swap or give. About {Math.round(f.sweden_export_share * 10)} in 10 donated garments leave the country.</div></li>
+          <li><span>✓</span><div><strong>Don't count on recycling.</strong> Only about {Math.round(f.recyclable_share * 100)} in 100 garments are simple enough to be recycled into new fibre.</div></li>
         </ul>
       </div>
     </section>
@@ -181,7 +181,7 @@
     <ul>
       <li><strong>Carbonfact open LCA database</strong> (v1.1): CO₂e and water-scarcity per kg for spinning, weaving, knitting, dyeing, finishing and assembly. World averages, factory steps only.</li>
       <li><strong>Norway post-consumer garments</strong> (Zenodo 20440761): {fmtInt(f.norway_garments)} garments from donation and waste streams; fibres, layers, trims, condition.</li>
-      <li><strong>Swedish second-hand sorting</strong> (Zenodo 12518734): {fmtInt(f.sweden_items)} labelled garments and where sorters sent them.</li>
+      <li><strong>Swedish second-hand sorting</strong> (Zenodo 12518734): {fmtInt(f.sweden_items)} garments labelled at Wargön Innovation's sorting plant and where sorters sent them (Myrorna's shop data is left out).</li>
       <li><strong>Eurostat env_wasgen</strong>: EU27 textile waste (W076) by sector, {f.eu_years[0]}–{f.eu_years[1]}.</li>
       <li><strong>The Fast Fashion Industry Dataset 2000–2023</strong> (Kaggle): garments produced and wears per garment (McKinsey), US textile waste (EPA), water per T-shirt (WWF).</li>
     </ul>
@@ -215,12 +215,12 @@
   @media (min-width: 780px) { .hero { grid-template-columns: minmax(0, 3fr) minmax(200px, 2fr); } }
   .eyebrow { margin: 0 0 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--faint); }
   h1 { margin: 0; font-size: clamp(2.4rem, 7vw, 4.4rem); line-height: 1.02; letter-spacing: -0.02em; }
-  h1 span { color: var(--better); }
+  h1 span { color: var(--water); }
   .lede { max-width: 56ch; font-size: 1.1rem; color: var(--muted); margin: 20px 0 24px; }
   .cue { display: inline-block; color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--worse); padding-bottom: 2px; }
   .hero-shirt { width: min(100%, 300px); justify-self: center; }
   .hero-shirt path:first-child { fill: var(--card); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
-  .hero-shirt .drop { fill: var(--better); animation: drip 3s ease-in-out infinite; transform-origin: 100px 130px; }
+  .hero-shirt .drop { fill: var(--water); animation: drip 3s ease-in-out infinite; transform-origin: 100px 130px; }
   @keyframes drip { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(6px) scale(1.06); } }
   @media (prefers-reduced-motion: reduce) { .hero-shirt .drop { animation: none; } }
 

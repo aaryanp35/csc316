@@ -14,10 +14,12 @@
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
-  /* diverging poles vs a baseline: worse = red, better = blue, gray = about the same */
+  /* diverging poles vs a baseline: worse = red, better = green, gray = about the same
+     (red/green pair validated for colour-blind separation: CVD ΔE 8.9 light, 8.4 dark) */
   --worse: #e34948;
-  --better: #2a78d6;
+  --better: #0b9c7d;
   --same: #898781;
+  --water: #2a78d6;
   --bar: #c3c2b7;
   --bar-focus: #52514e;
   --banner-bg: #fff6d6;
@@ -41,8 +43,9 @@
     --series-2: #d95926;
     --series-3: #199e70;
     --worse: #e66767;
-    --better: #3987e5;
+    --better: #13a48b;
     --same: #898781;
+    --water: #3987e5;
     --bar: #4a4a46;
     --bar-focus: #c3c2b7;
     --banner-bg: #2e2810;
@@ -65,8 +68,9 @@
   --series-2: #d95926;
   --series-3: #199e70;
   --worse: #e66767;
-  --better: #3987e5;
+  --better: #13a48b;
   --same: #898781;
+  --water: #3987e5;
   --bar: #4a4a46;
   --bar-focus: #c3c2b7;
   --banner-bg: #2e2810;
