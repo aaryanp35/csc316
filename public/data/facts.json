@@ -11,16 +11,16 @@
   "waste_looks_new_share": 0.307,
   "waste_price_tag_share": 0.0074,
   "recyclable_share": 0.216,
-  "sweden_items": 31638,
+  "sweden_items": 24572,
   "sweden_usage_raw": {
-    "Reuse": 19027,
-    "Export": 10054,
-    "Recycle": 2188,
-    "Remake": 156,
-    "Repair": 125,
-    "Energy recovery": 88
+    "Reuse": 11957,
+    "Export": 9995,
+    "Recycle": 2237,
+    "Remake": 154,
+    "Repair": 142,
+    "Energy recovery": 87
   },
-  "sweden_export_share": 0.318,
+  "sweden_export_share": 0.407,
   "eu_years": [
     2004,
     2024

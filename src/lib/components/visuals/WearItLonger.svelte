@@ -70,7 +70,7 @@ Numbers: factory CO2e of one cotton T-shirt (Carbonfact chain x median Norway T-
   <div class="numbers">
     <p class="wears"><strong>{wears}</strong> {wears === 1 ? "wear" : "wears"}</p>
     <dl>
-      <div><dt>CO₂ per wear</dt><dd><strong>{perCo2 >= 100 ? fmtInt(perCo2) : fmtOne(perCo2)}</strong> g</dd></div>
+      <div><dt>Factory CO₂ per wear</dt><dd><strong>{perCo2 >= 100 ? fmtInt(perCo2) : fmtOne(perCo2)}</strong> g</dd></div>
       <div><dt>Water per wear</dt><dd><strong>{perWater >= 100 ? fmtInt(perWater) : fmtOne(perWater)}</strong> L</dd></div>
     </dl>
     <p class="compare">
@@ -95,7 +95,7 @@ Numbers: factory CO2e of one cotton T-shirt (Carbonfact chain x median Norway T-
 </div>
 
 <div class="curve">
-  <p class="curve-title">CO₂ per wear (g) by number of wears. Drag along the curve.</p>
+  <p class="curve-title">Factory CO₂ per wear (g) by number of wears. Drag along the curve.</p>
   <ChartFrame label="Curve of grams of CO2 per wear against number of wears; it falls steeply over the first 20 wears." aspect={0.24} height={undefined} margin={{ top: 16, right: 16, bottom: 28, left: 44 }}>
     {#snippet children({ width, height })}
       {@const x = scaleLinear().domain([1, MAX]).range([0, width])}

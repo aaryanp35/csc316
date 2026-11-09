@@ -56,5 +56,5 @@ drafts/                            two standalone design drafts (frames 2 and 7)
 ## Conventions
 
 - D3 does the maths (scales, axes, shapes, stacks); Svelte owns the DOM. Draw inside `ChartFrame`'s `children` snippet.
-- Colours come from CSS tokens in `app.css` (validated colour-blind-safe categorical slots, red/blue diverging for worse/better).
+- Colours come from CSS tokens in `app.css` (validated colour-blind-safe categorical slots, red/green diverging for worse/better, with blue kept for water).
 - Every chart has a hover/keyboard layer and a "Show the numbers" table.

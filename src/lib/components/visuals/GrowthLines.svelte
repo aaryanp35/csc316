@@ -1,8 +1,9 @@
 <!-- Sketch 2 + storyboard frame 4: growth since 2000 (lines). Data: Kaggle "Fast Fashion Industry 2000-2023"
 (McKinsey garments and wears, EPA US textile waste) and Eurostat env_wasgen (EU textile waste by sector).
 Main: x = year, y = growth index (first year = 100); one line per measure, dot = year with a real figure (series
-have different years), dashed baseline at 100. Side panel: EU textile waste from households vs textile factories,
-indexed to 2004 = 100; a dashed segment bridges years Eurostat did not publish.
+have different years), dashed baseline at 100. Side panel: EU textile waste from households vs textile factories in
+million tonnes, so households overtaking factories shows as a real crossing; a dashed segment bridges years Eurostat did
+not publish.
 Hover/arrow keys: crosshair snaps to the nearest year with data; tooltip lists every measure that has a figure then.
 -->
 <script lang="ts">
@@ -170,40 +171,45 @@ Hover/arrow keys: crosshair snaps to the nearest year with data; tooltip lists e
   <aside class="inset">
     <p class="inset-title">In the EU, the waste moved home</p>
     <p class="inset-sub">
-      Textile waste from <strong>households</strong> is up <strong>{Math.round(euLast("Households").index - 100)}%</strong>
-      ({fmtOne(euLast("Households").tonnes / 1e6)} Mt in {euLast("Households").year}), while waste from
+      Textile waste thrown out by <strong>households</strong> rose <strong>{Math.round(euLast("Households").index - 100)}%</strong>
+      to {fmtOne(euLast("Households").tonnes / 1e6)} million tonnes in {euLast("Households").year}, while waste from
       <strong>textile factories</strong> fell <strong>{fmtPct(euLast("Textile & clothing factories").index - 100).replace("−", "")}</strong>
-      as Europe stopped making its own clothes.{#if crossover}{" "}Households overtook factories in {crossover.year}.{/if}
+      as Europe stopped making its own clothes.{#if crossover}{" "}Households overtook factories by {crossover.year}.{/if}
     </p>
-    <ChartFrame label="EU textile waste index, 2004 = 100: households rise to {fmtInt(euLast('Households').index)}, textile factories fall to {fmtInt(euLast('Textile & clothing factories').index)}." aspect={0.78} margin={{ top: 14, right: 78, bottom: 26, left: 34 }}>
+    <ChartFrame label="EU textile waste in million tonnes, {euPts('Households')[0].year} to {euLast('Households').year}: households {fmtOne(euPts('Households')[0].tonnes / 1e6)} to {fmtOne(euLast('Households').tonnes / 1e6)}, textile factories {fmtOne(euPts('Textile & clothing factories')[0].tonnes / 1e6)} to {fmtOne(euLast('Textile & clothing factories').tonnes / 1e6)}{crossover ? `; households overtook factories by ${crossover.year}` : ''}." aspect={0.78} margin={{ top: 26, right: 78, bottom: 26, left: 34 }}>
       {#snippet children({ width, height })}
         {@const ex = scaleLinear().domain(extent(eu, (d) => d.year) as [number, number]).range([0, width])}
-        {@const ey = scaleLinear().domain([0, (max(eu, (d) => d.index) ?? 100) * 1.08]).nice().range([height, 0])}
-        {@const eLine = (rows: EuWasteRow[]) => line<EuWasteRow>().x((d) => ex(d.year)).y((d) => ey(d.index))(rows) ?? ""}
-        {@const ends = dodge(euSectors.map((s) => ey(euLast(s.key).index)), 28)}
+        {@const ey = scaleLinear().domain([0, ((max(eu, (d) => d.tonnes) ?? 1e6) / 1e6) * 1.08]).nice().range([height, 0])}
+        {@const mt = (d: EuWasteRow) => ey(d.tonnes / 1e6)}
+        {@const eLine = (rows: EuWasteRow[]) => line<EuWasteRow>().x((d) => ex(d.year)).y(mt)(rows) ?? ""}
+        {@const ends = dodge(euSectors.map((s) => mt(euLast(s.key))), 30)}
+        <text class="axis-label" x={-34} y={-14}>Million tonnes</text>
         {#each ey.ticks(4) as t (t)}
-          <g class="tick" transform="translate(0,{ey(t)})"><line x1="0" x2={width} /><text x="-6" dy="0.32em" text-anchor="end">{t}</text></g>
+          <g class="tick" transform="translate(0,{ey(t)})"><line x1="0" x2={width} /><text x="-6" dy="0.32em" text-anchor="end">{fmtNum(t)}</text></g>
         {/each}
-        <line class="baseline" x1="0" x2={width} y1={ey(100)} y2={ey(100)} />
         {#each ex.ticks(3).filter((t) => Number.isInteger(t)) as t (t)}
           <text class="axis-label" x={ex(t)} y={height + 18} text-anchor="middle">{t}</text>
         {/each}
         {#each euSectors as s, si (s.key)}
           {@const r = runs(euPts(s.key))}
           {#each r.solid as seg}<path d={eLine(seg)} class="eu-line {s.cls}" />{/each}
-          {#each r.gaps as [a, b]}<line class="eu-gap {s.cls}" x1={ex(a.year)} x2={ex(b.year)} y1={ey(a.index)} y2={ey(b.index)} />{/each}
+          {#each r.gaps as [a, b]}<line class="eu-gap {s.cls}" x1={ex(a.year)} x2={ex(b.year)} y1={mt(a)} y2={mt(b)} />{/each}
           {#each euPts(s.key) as d (d.year)}
-            <circle cx={ex(d.year)} cy={ey(d.index)} r={euHover === d ? 5.5 : 3.5} class="eu-dot {s.cls}" />
-            <circle cx={ex(d.year)} cy={ey(d.index)} r="11" class="em-hit" role="img" aria-label="{s.label} {d.year}: {fmtInt(d.tonnes)} tonnes"
+            <circle cx={ex(d.year)} cy={mt(d)} r={euHover === d ? 5.5 : 3.5} class="eu-dot {s.cls}" />
+            <circle cx={ex(d.year)} cy={mt(d)} r="11" class="em-hit" role="img" aria-label="{s.label} {d.year}: {fmtInt(d.tonnes)} tonnes"
               onpointerenter={(e) => { euHover = d; tip = { x: e.clientX, y: e.clientY }; }}
               onpointermove={(e) => (tip = { x: e.clientX, y: e.clientY })}
               onpointerleave={() => (euHover = null)} />
           {/each}
-          <text class="eu-end {s.cls}" x={width + 6} y={ends[si]} dy="0.32em">{s.label}</text>
+          <text class="eu-end {s.cls}" x={width + 6} y={ends[si] - 6} dy="0.32em">{s.label}</text>
+          <text class="eu-end-val" x={width + 6} y={ends[si] + 8} dy="0.32em">{fmtOne(euLast(s.key).tonnes / 1e6)} Mt</text>
         {/each}
       {/snippet}
     </ChartFrame>
-    <p class="inset-note">Index, 2004 = 100. Dashed = years Eurostat did not report. Source: Eurostat env_wasgen (EU27).</p>
+    <p class="inset-note">
+      Dashed = years Eurostat did not report, so the exact year households passed factories is unknown. Part of the recent
+      rise is better collection: EU countries must collect textiles separately from 2025. Source: Eurostat env_wasgen (EU27).
+    </p>
   </aside>
 </div>
 
@@ -282,6 +288,7 @@ Hover/arrow keys: crosshair snaps to the nearest year with data; tooltip lists e
   .eu-end { font-size: 11px; font-weight: 600; stroke: none; }
   .eu-end.hh { fill: var(--ink); }
   .eu-end.fac { fill: var(--muted); }
+  .eu-end-val { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
   .em-hit { fill: transparent; }
 
   .tt-head { font-weight: 700; margin-bottom: 4px; }
