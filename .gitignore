@@ -1,5 +1,28 @@
+# Only the website's code goes to GitHub: src/, public/ (incl. cleaned data), scripts/pipeline/, root config files.
+
+# dependencies and build output
 node_modules/
 dist/
+.vite/
+
+# drafts and other extra material (not part of the website)
+drafts/
+*.pdf
+*.zip
+*.docx
+
+# raw downloaded datasets (rebuilt by scripts/pipeline/fetch_all.sh)
+data/
+
+# editor / tool / OS files
+.claude/
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.log
+.env
+.env.*
 .DS_Store
-Process Book_ CSC316 Group.pdf
-data/raw/
+Thumbs.db
+desktop.ini
