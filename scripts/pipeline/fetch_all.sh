@@ -13,12 +13,10 @@ mkdir -p data/raw/{norway,sweden,eurostat,kaggle}
 $CURL -sSL -o data/raw/norway/NPCGA_datatable_1.1.csv "https://zenodo.org/api/records/20440761/files/NPCGA_datatable_1.1.csv/content"
 $CURL -sSL -o data/raw/norway/README_for_datatable.pdf "https://zenodo.org/api/records/20440761/files/README_for_datatable.pdf/content"
 
-# 3. Swedish second-hand sorting (Zenodo 12518734 is one 27 GB zip of images + JSON). The authors' Hugging Face copy
-#    exposes exact label frequencies for every item, which is all the story needs.
-for split in train test; do
-  $CURL -sSL -o "data/raw/sweden/hf_statistics_$split.json" \
-    "https://datasets-server.huggingface.co/statistics?dataset=fnauman/fashion-second-hand-front-only-rgb&config=default&split=$split"
-done
+# 3. Swedish second-hand sorting (Zenodo 12518734 is one 27 GB zip of images + JSON). Range requests read only the
+#    ~32,000 JSON annotations (where sorters sent each garment, and at which station); no images are downloaded.
+#    (The Hugging Face copy has no station column, so it can't separate the sorting plant from Myrorna's shops.)
+python -I scripts/pipeline/fetch_sweden_labels.py data/raw/sweden
 
 # 4. Eurostat env_wasgen: textile wastes (W076), all sectors and countries, tonnes and kg per person
 $CURL -sSL -o data/raw/eurostat/env_wasgen_textiles.csv \
