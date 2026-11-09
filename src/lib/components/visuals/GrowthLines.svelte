@@ -92,9 +92,9 @@ Hover/arrow keys: crosshair snaps to the nearest year with data; tooltip lists e
 </script>
 
 <p class="headline">
-  Between {prod.first.year} and {prod.last.year} the world went from <strong>{fmtInt(prod.first.value)}</strong> to
-  <strong>{fmtInt(prod.last.value)} billion</strong> new garments a year, while each one is now worn
-  <strong>{fmtInt(wears.last.value)} times</strong> on average, down from {fmtInt(wears.first.value)}.
+  From {firstYear} to {years[years.length - 1]}, the world went from <strong>{fmtInt(prod.first.value)}</strong> to
+  <strong>{fmtInt(prod.last.value)} billion</strong> new garments a year (latest figure: {prod.last.year}), while each one
+  is now worn <strong>{fmtInt(wears.last.value)} times</strong> on average ({wears.last.year}), down from {fmtInt(wears.first.value)}.
 </p>
 <p class="sub">
   Each line starts at 100 in its first year with data. Above the dashed line means it grew; below means it shrank.
